@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // 적의 기본 상태(목차)를 구성하고 싶다.
+
+[RequireComponent(typeof(CharacterController))]
 public class Enemy : MonoBehaviour
 {
     // 열거형
@@ -21,7 +23,8 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        // CharacterController 가져오기
+        cc = GetComponent<CharacterController>();
     }
 
     // Update is called once per frame
@@ -70,6 +73,33 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    // 1. 타겟쪽으로 이동하고 싶다.
+    // 필요속성 : 타겟, 이동 속도
+    // 2. 타겟쪽으로 회전하고 싶다.
+    // 필요속성 : 회전속도
+    public GameObject target;
+    public float speed = 5;
+    CharacterController cc;
+    public float rotSpeed = 5;
+    private void Move()
+    {
+        // 타겟쪽으로 이동하고 싶다.
+        // 1. 방향이 필요
+        // -> direction = target - me
+        Vector3 dir = target.transform.position - transform.position;
+        dir.Normalize();
+        dir.y = 0;
+        // 2. 이동하고 싶다.
+        // -> P = P0 + vt
+        cc.SimpleMove(dir * speed);
+        // 타겟쪽으로 회전하고 싶다.
+        // transform.LookAt(target.transform);
+        //transform.forward = dir;
+        // -> 부드럽게 회전하고 싶다.
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), rotSpeed * Time.deltaTime);
+       // transform.forward = Vector3.Lerp(transform.forward, dir, rotSpeed * Time.deltaTime);
+    }
+
     private void Die()
     {
         throw new NotImplementedException();
@@ -85,10 +115,7 @@ public class Enemy : MonoBehaviour
         throw new NotImplementedException();
     }
 
-    private void Move()
-    {
-        throw new NotImplementedException();
-    }
+    
 
     
 }
