@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// 사용자가 발사버튼을 눌러서 Enemy 를 맞추면
+// Enemy 한테 야 너 맞았어. 라고 알려주고 싶다.
 public class PlayerFire : MonoBehaviour
 {
     //총알공장
@@ -57,6 +59,9 @@ public class PlayerFire : MonoBehaviour
                 ParticleSystem ps = fragmentEft.GetComponent<ParticleSystem>();
                 //가져온 컴포넌트의 기능중 Play실행
                 ps.Play();
+
+                // 사용자가 발사버튼을 눌러서 Enemy 를 맞추면
+                // Enemy 한테 야 너 맞았어. 라고 알려주고 싶다.
             }
 
             //AudioSource 컴포넌트 가져오자

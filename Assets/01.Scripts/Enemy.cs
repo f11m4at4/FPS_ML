@@ -114,6 +114,36 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    // 일정시간에 한번씩 공격하고 싶다.
+    // 필요속성 : 공격대기시간
+    public float attackDelayTime = 2;
+    private void Attack()
+    {
+        // 일정시간에 한번씩 공격하고 싶다.
+        // 1. 시간이 흘렀으니까
+        currentTime += Time.deltaTime;
+        // 2. 공격시간이 됐으니까
+        // -> 만약 경과시간이 공격대기시간을 초과하였다면
+        if (currentTime > attackDelayTime)
+        {
+            // 3. 공격하고 싶다. (print)
+            print("Attack");
+            currentTime = 0;
+        }
+
+        // 타겟이 공격 범위를 벗어나면 상태를 Move 로 전환하고 싶다.
+        // 1. 타겟이 공격 범위를 벗어났으니까
+        // -> 만약 타겟과의 거리가 공격 범위를 초과 했다면
+        // -> 필요정보 : 타겟과의 거리
+        float distance = Vector3.Distance(target.transform.position, transform.position);
+        if (distance > attackRange)
+        {
+            // 2. 상태를 Move 로 전환하고 싶다.
+            m_state = EnemyState.Move;
+        }
+
+    }
+
     private void Die()
     {
         throw new NotImplementedException();
@@ -123,13 +153,5 @@ public class Enemy : MonoBehaviour
     {
         throw new NotImplementedException();
     }
-
-    private void Attack()
-    {
-        throw new NotImplementedException();
-    }
-
-    
-
     
 }
