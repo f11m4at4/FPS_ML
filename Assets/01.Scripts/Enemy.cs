@@ -81,12 +81,16 @@ public class Enemy : MonoBehaviour
     public float speed = 5;
     CharacterController cc;
     public float rotSpeed = 5;
+    // 필요속성 : 공격범위
+    public float attackRange = 2;
     private void Move()
     {
         // 타겟쪽으로 이동하고 싶다.
         // 1. 방향이 필요
         // -> direction = target - me
         Vector3 dir = target.transform.position - transform.position;
+        float distance = dir.magnitude;
+
         dir.Normalize();
         dir.y = 0;
         // 2. 이동하고 싶다.
@@ -97,7 +101,17 @@ public class Enemy : MonoBehaviour
         //transform.forward = dir;
         // -> 부드럽게 회전하고 싶다.
         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), rotSpeed * Time.deltaTime);
-       // transform.forward = Vector3.Lerp(transform.forward, dir, rotSpeed * Time.deltaTime);
+        // transform.forward = Vector3.Lerp(transform.forward, dir, rotSpeed * Time.deltaTime);
+
+        // 공격범위안에 들어가면 상태를 공격으로 전환하고 싶다.
+        // 1. 공격범위 안에 들어왔으니까
+        // -> 만약 상대와의 거리가 공격범위 보다 작으면
+        //float distance = Vector3.Distance(target.transform.position, transform.position);
+        if (distance < attackRange)
+        {
+            // 2. 상태를 공격으로 전환하고 싶다.
+            m_state = EnemyState.Attack;
+        }
     }
 
     private void Die()
