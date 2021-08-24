@@ -44,7 +44,7 @@ public class PlayerFire : MonoBehaviour
             //Ray에 충돌 하고 싶은 Layer
             int layerObs = 1 << LayerMask.NameToLayer("Obstacle");
             int layerWall = 1 << LayerMask.NameToLayer("Wall");
-            int layer = layerObs | layerWall;
+            int layer = 1 << LayerMask.NameToLayer("Player");
 
             //Ray를 발사시켜서 어딘가에 부딪혔다면
             if(Physics.Raycast(ray, out hitInfo, 100, ~layer))
@@ -60,8 +60,13 @@ public class PlayerFire : MonoBehaviour
                 //가져온 컴포넌트의 기능중 Play실행
                 ps.Play();
 
-                // 사용자가 발사버튼을 눌러서 Enemy 를 맞추면
-                // Enemy 한테 야 너 맞았어. 라고 알려주고 싶다.
+                // 맞은 녀석이 Enemy 라면
+                Enemy enemy = hitInfo.transform.GetComponent<Enemy>();
+                if (enemy)
+                {
+                    // Enemy 한테 야 너 맞았어. 라고 알려주고 싶다.
+                    enemy.OnDamageProcess(ray.direction); 
+                }
             }
 
             //AudioSource 컴포넌트 가져오자

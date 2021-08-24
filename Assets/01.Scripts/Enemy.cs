@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // 적의 기본 상태(목차)를 구성하고 싶다.
+// 1. hp 를 갖고 싶다.
+// 2. 맞으면 상태를 피격으로 전환하고 싶다.
+// 3. hp 가 0 이하면 없애고 싶다.
 
 [RequireComponent(typeof(CharacterController))]
 public class Enemy : MonoBehaviour
@@ -20,6 +23,7 @@ public class Enemy : MonoBehaviour
 
     EnemyState m_state = EnemyState.Idle;
 
+    public int hp = 3;
     // Start is called before the first frame update
     void Start()
     {
@@ -149,9 +153,38 @@ public class Enemy : MonoBehaviour
         throw new NotImplementedException();
     }
 
+    // 일정시간 기다렸다가 상태를 Idle 로 전환하고 싶다.
+    // 필요속성 : damage 대기시간
+    public float damageDelayTime = 2;
     private void Damage()
     {
-        throw new NotImplementedException();
+        currentTime += Time.deltaTime;
+        if (currentTime > damageDelayTime)
+        {
+            // 일정시간 기다렸다가 상태를 Idle 로 전환하고 싶다.
+            m_state = EnemyState.Idle;
+            currentTime = 0;
+        }
     }
     
+    // 플레이어로부터 피격 받았을때 처리할 함수
+    public void OnDamageProcess(Vector3 shootDirection)
+    {
+        hp--;
+        // 1. hp 가 0 이하면 없애고 싶다.
+        if(hp <= 0)
+        {
+            Destroy(gameObject);
+        }
+        // 2. 맞으면 상태를 피격으로 전환하고 싶다.
+        else
+        {
+            // 넉백 knockback
+            // 밀릴 방향
+            // P = P0 + vt
+            shootDirection.y = 0;
+            transform.position += shootDirection * 2;
+            m_state = EnemyState.Damage;
+        }
+    }
 }
