@@ -8,6 +8,9 @@ using UnityEngine;
 // 2. 맞으면 상태를 피격으로 전환하고 싶다.
 // 3. hp 가 0 이하면 없애고 싶다.
 
+// 적이 각 상태에서 애니메이션이 재생되도록 하고싶다.
+// 1. Idle -> Move 애니메이션이 전환되도록 하고 싶다.
+// 필요속성 : Animator 컴포넌트
 [RequireComponent(typeof(CharacterController))]
 public class Enemy : MonoBehaviour
 {
@@ -24,11 +27,15 @@ public class Enemy : MonoBehaviour
     EnemyState m_state = EnemyState.Idle;
 
     public int hp = 3;
-    // Start is called before the first frame update
+
+    // 필요속성 : Animator 컴포넌트
+    Animator anim;
+
     void Start()
     {
         // CharacterController 가져오기
         cc = GetComponent<CharacterController>();
+        anim = GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
@@ -73,6 +80,8 @@ public class Enemy : MonoBehaviour
         {
             // 3. 상태를 Move 로 전환하고 싶다.
             m_state = EnemyState.Move;
+            // Animation 상태도 Move 로 전환하고 싶다.
+            anim.SetTrigger("Move");
             currentTime = 0;
         }
     }

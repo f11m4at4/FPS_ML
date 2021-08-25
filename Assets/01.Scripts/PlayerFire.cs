@@ -35,9 +35,11 @@ public class PlayerFire : MonoBehaviour
         if(Input.GetButtonDown("Fire2"))
         {
             //카메라위치, 카메라앞방향에서 발사되는 Ray를 만든다.
-            Ray ray = new Ray(
-                Camera.main.transform.position, 
-                Camera.main.transform.forward);
+            //Ray ray = new Ray(
+            //    Camera.main.transform.position, 
+            //    Camera.main.transform.forward);
+
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
             //맞은위치의 정보
             RaycastHit hitInfo;
