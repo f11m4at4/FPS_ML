@@ -55,9 +55,9 @@ public class Enemy : MonoBehaviour
             case EnemyState.Attack:
                 Attack();
                 break;
-            case EnemyState.Damage:
-                Damage();
-                break;
+            //case EnemyState.Damage:
+            //    Damage();
+            //    break;
             case EnemyState.Die:
                 Die();
                 break;
@@ -167,25 +167,49 @@ public class Enemy : MonoBehaviour
     // 일정시간 기다렸다가 상태를 Idle 로 전환하고 싶다.
     // 필요속성 : damage 대기시간
     public float damageDelayTime = 2;
-    private void Damage()
+    private IEnumerator Damage(Vector3 shootDirection)
     {
-        currentTime += Time.deltaTime;
-        if (currentTime > damageDelayTime)
-        {
-            // 일정시간 기다렸다가 상태를 Idle 로 전환하고 싶다.
-            m_state = EnemyState.Idle;
-            currentTime = 0;
-        }
+        shootDirection.y = 0;
+        transform.position += shootDirection * 2;
+        m_state = EnemyState.Damage;
+        // animation 의 상태를 피격으로
+        anim.SetTrigger("Damage");
+
+        // 대기시간 만큼 기다렸다가 
+        yield return new WaitForSeconds(damageDelayTime);
+        // 상태를 Idle 로 전환
+        m_state = EnemyState.Idle;
+
+        //currentTime += Time.deltaTime;
+        //if (currentTime > damageDelayTime)
+        //{
+        //    // 일정시간 기다렸다가 상태를 Idle 로 전환하고 싶다.
+        //    m_state = EnemyState.Idle;
+        //    currentTime = 0;
+        //}
     }
-    
+
     // 플레이어로부터 피격 받았을때 처리할 함수
+    Vector3 knockbackPos;
     public void OnDamageProcess(Vector3 shootDirection)
     {
+        // 죽은 애는 또 피격처리 하고 싶지 않다.
+        if(m_state == EnemyState.Die)
+        {
+            return;
+        }
+        // 코루틴을 종료하고 싶다.
+        StopAllCoroutines();
+
         hp--;
         // 1. hp 가 0 이하면 없애고 싶다.
         if(hp <= 0)
         {
-            Destroy(gameObject);
+            // 죽으면 충돌체 꺼버리자
+            cc.enabled = false;
+            m_state = EnemyState.Die;
+            anim.SetTrigger("Die");
+            //Destroy(gameObject);
         }
         // 2. 맞으면 상태를 피격으로 전환하고 싶다.
         else
@@ -193,9 +217,10 @@ public class Enemy : MonoBehaviour
             // 넉백 knockback
             // 밀릴 방향
             // P = P0 + vt
-            shootDirection.y = 0;
-            transform.position += shootDirection * 2;
-            m_state = EnemyState.Damage;
+
+            // 피격처리를 코루틴을 이용하여 처리하고 싶다.
+            StartCoroutine(Damage(shootDirection));
+            
         }
     }
 }
