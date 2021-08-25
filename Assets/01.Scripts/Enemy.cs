@@ -124,6 +124,7 @@ public class Enemy : MonoBehaviour
         {
             // 2. 상태를 공격으로 전환하고 싶다.
             m_state = EnemyState.Attack;
+            currentTime = attackDelayTime;
         }
     }
 
@@ -140,7 +141,7 @@ public class Enemy : MonoBehaviour
         if (currentTime > attackDelayTime)
         {
             // 3. 공격하고 싶다. (print)
-            print("Attack");
+            anim.SetTrigger("Attack");
             currentTime = 0;
         }
 
@@ -153,6 +154,7 @@ public class Enemy : MonoBehaviour
         {
             // 2. 상태를 Move 로 전환하고 싶다.
             m_state = EnemyState.Move;
+            anim.SetTrigger("Move");
         }
 
     }
