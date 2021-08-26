@@ -42,6 +42,7 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         print("현재상태 : " + m_state);
+
         // 적의 기본 상태(목차)를 구성하고 싶다.
         // 만약 적의 상태가 Idle 이라면
         switch(m_state)
@@ -159,11 +160,7 @@ public class Enemy : MonoBehaviour
 
     }
 
-    private void Die()
-    {
-        throw new NotImplementedException();
-    }
-
+    
     // 일정시간 기다렸다가 상태를 Idle 로 전환하고 싶다.
     // 필요속성 : damage 대기시간
     public float damageDelayTime = 2;
@@ -201,6 +198,7 @@ public class Enemy : MonoBehaviour
         // 코루틴을 종료하고 싶다.
         StopAllCoroutines();
 
+        currentTime = 0;
         hp--;
         // 1. hp 가 0 이하면 없애고 싶다.
         if(hp <= 0)
@@ -223,4 +221,32 @@ public class Enemy : MonoBehaviour
             
         }
     }
+
+    // 아래로 내려가도록 하자.
+    // 필요속성 : 떨어지는 속도
+    public float downSpeed = 2;
+    // 완전히 없어지면 제거하자
+    private void Die()
+    {
+        // 2초정도 대기하고 
+        currentTime += Time.deltaTime;
+        if (currentTime > 2)
+        {
+            // 아래로 내려가도록 하자.
+            // P = P0 + vt
+            Vector3 vt = Vector3.down * downSpeed * Time.deltaTime;
+            Vector3 P0 = transform.position;
+            Vector3 P = P0 + vt;
+            transform.position = P;
+
+            // 완전히 없어지면 제거하자
+            // 만약 나의 위치가 -1 보다 작아지면
+            if (P.y <= -1)
+            {
+                // 제거하자
+                Destroy(gameObject);
+            }
+        }
+    }
+
 }
