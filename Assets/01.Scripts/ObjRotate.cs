@@ -14,7 +14,7 @@ public class ObjRotate : MonoBehaviour
     //회전가능여부
     public bool canRotH;
     public bool canRotV;
--
+
     // 진동크기
     public float amp = 1;
     public float freq = 2;

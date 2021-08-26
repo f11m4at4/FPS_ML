@@ -33,6 +33,10 @@ public class Enemy : MonoBehaviour
 
     void Start()
     {
+        // target 을 찾아서 할당해 주자
+        target = GameObject.Find("Player");
+
+
         // CharacterController 가져오기
         cc = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
