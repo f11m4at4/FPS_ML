@@ -22,8 +22,18 @@ public class EnemyManager : MonoBehaviour
     [HideInInspector]
     public List<GameObject> enemyPool = new List<GameObject>();
 
-    [SerializeField]
-    private int age = 10;
+
+    // 싱글톤 디자인패턴을 이용하여 EnemyManager 를 사용하고 싶다.
+    public static EnemyManager Instance = null;
+
+    private void Awake()
+    {
+        if(Instance == null)
+        {
+            Instance = this;
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
