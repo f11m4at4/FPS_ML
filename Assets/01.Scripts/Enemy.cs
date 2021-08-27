@@ -248,7 +248,15 @@ public class Enemy : MonoBehaviour
             if (P.y <= -1)
             {
                 // 제거하자
-                Destroy(gameObject);
+                // 오브젝트풀에 다시 넣어줘야 한다.
+                // 1. EnemyManager 객체(인스턴스, 변수) 가 있어야한다.
+                EnemyManager em = GameObject.Find("EnemyManager").GetComponent<EnemyManager>();
+                // 2. 오브젝트풀 있어야 한다.
+                // 3. 풀에 삽입이 가능하다.
+                em.enemyPool.Add(gameObject);
+                // 4. 나를 비활성화시켜야 한다.
+                gameObject.SetActive(false);
+                //Destroy(gameObject);
             }
         }
     }
