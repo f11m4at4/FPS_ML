@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 // 적의 기본 상태(목차)를 구성하고 싶다.
 // 1. hp 를 갖고 싶다.
@@ -11,6 +12,8 @@ using UnityEngine;
 // 적이 각 상태에서 애니메이션이 재생되도록 하고싶다.
 // 1. Idle -> Move 애니메이션이 전환되도록 하고 싶다.
 // 필요속성 : Animator 컴포넌트
+
+// Navigation 을 이용한 AI 길찾기를 수행하게 하고 싶다.
 [RequireComponent(typeof(CharacterController))]
 public class Enemy : MonoBehaviour
 {
@@ -31,6 +34,8 @@ public class Enemy : MonoBehaviour
     // 필요속성 : Animator 컴포넌트
     Animator anim;
 
+    NavMeshAgent agent;
+
     void Start()
     {
         // target 을 찾아서 할당해 주자
@@ -40,6 +45,8 @@ public class Enemy : MonoBehaviour
         // CharacterController 가져오기
         cc = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
+
+        agent = GetComponent<NavMeshAgent>();
     }
 
     // Update is called once per frame
@@ -88,6 +95,7 @@ public class Enemy : MonoBehaviour
             // Animation 상태도 Move 로 전환하고 싶다.
             anim.SetTrigger("Move");
             currentTime = 0;
+            agent.enabled = true;
         }
     }
 
@@ -109,27 +117,32 @@ public class Enemy : MonoBehaviour
         Vector3 dir = target.transform.position - transform.position;
         float distance = dir.magnitude;
 
-        dir.Normalize();
-        dir.y = 0;
+        // agent 를 이용해서 이동하기
+        agent.destination = target.transform.position;
+
+        //dir.Normalize();
+        //dir.y = 0;
         // 2. 이동하고 싶다.
         // -> P = P0 + vt
-        cc.SimpleMove(dir * speed);
+        //cc.SimpleMove(dir * speed);
         // 타겟쪽으로 회전하고 싶다.
         // transform.LookAt(target.transform);
         //transform.forward = dir;
         // -> 부드럽게 회전하고 싶다.
-        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), rotSpeed * Time.deltaTime);
+        //transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), rotSpeed * Time.deltaTime);
         // transform.forward = Vector3.Lerp(transform.forward, dir, rotSpeed * Time.deltaTime);
 
         // 공격범위안에 들어가면 상태를 공격으로 전환하고 싶다.
         // 1. 공격범위 안에 들어왔으니까
         // -> 만약 상대와의 거리가 공격범위 보다 작으면
         //float distance = Vector3.Distance(target.transform.position, transform.position);
+
         if (distance < attackRange)
         {
             // 2. 상태를 공격으로 전환하고 싶다.
             m_state = EnemyState.Attack;
             currentTime = attackDelayTime;
+            agent.enabled = false;
         }
     }
 
@@ -160,6 +173,7 @@ public class Enemy : MonoBehaviour
             // 2. 상태를 Move 로 전환하고 싶다.
             m_state = EnemyState.Move;
             anim.SetTrigger("Move");
+            agent.enabled = true;
         }
 
     }
@@ -201,6 +215,8 @@ public class Enemy : MonoBehaviour
         }
         // 코루틴을 종료하고 싶다.
         StopAllCoroutines();
+
+        agent.enabled = false;
 
         currentTime = 0;
         hp--;
