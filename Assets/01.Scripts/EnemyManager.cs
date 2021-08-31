@@ -8,6 +8,9 @@ using UnityEngine;
 
 // 오브젝트풀을 이용하여 적을 미리 많이 생성해 놓고 싶다.
 // 필요속성 : 오브젝트풀, 풀크기
+
+// 일정시간에 한번씩 적을 SpawnPoints 에 만들어주고 싶다.(랜덤으로 sp 선택)
+// 필요속성 : SpawnPoints
 public class EnemyManager : MonoBehaviour
 {
     // 필요속성 : 생성시간, 경과시간, 적 공장
@@ -25,6 +28,9 @@ public class EnemyManager : MonoBehaviour
 
     // 싱글톤 디자인패턴을 이용하여 EnemyManager 를 사용하고 싶다.
     public static EnemyManager Instance = null;
+
+    // 필요속성 : SpawnPoints
+    public Transform[] spawnpoints;
 
     private void Awake()
     {
@@ -72,7 +78,8 @@ public class EnemyManager : MonoBehaviour
                 //활성화 시키자
                 enemy.SetActive(true);
                 // 4. 배치.
-                enemy.transform.position = transform.position;
+                int index = Random.Range(0, spawnpoints.Length);
+                enemy.transform.position = spawnpoints[index].position;
                 currentTime = 0;
                 enemyPool.RemoveAt(0);
             }
