@@ -2,8 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Player 한테 애니메이션을 재생하도록 하고 싶다.
+// 필요속성 : Animator 컴포넌트
 public class PlayerMove : MonoBehaviour
 {
+    // 필요속성 : Animator 컴포넌트
+    Animator anim;
+
     //속력
     public float speed = 5;
     //Character Controller
@@ -23,6 +28,7 @@ public class PlayerMove : MonoBehaviour
     void Start()
     {  
         cc = GetComponent<CharacterController>();
+        anim = GetComponentInChildren<Animator>();
     }
 
     void Update()
@@ -31,6 +37,10 @@ public class PlayerMove : MonoBehaviour
         float h = Input.GetAxis("Horizontal");
         //W,S 키 입력
         float v = Input.GetAxis("Vertical");
+
+        // animation 재생
+        anim.SetFloat("Speed", v * v);
+
         //방향을 정하고
         Vector3 dirH = transform.right * h;
         Vector3 dirV = transform.forward * v;
