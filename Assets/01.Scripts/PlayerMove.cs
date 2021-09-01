@@ -40,6 +40,17 @@ public class PlayerMove : MonoBehaviour
 
         // animation 재생
         anim.SetFloat("Speed", v * v);
+        anim.SetFloat("Direction", h);
+        
+        if(Input.GetKey(KeyCode.LeftShift))
+        {
+            anim.SetLayerWeight(1, 1);
+        }
+        else
+        {
+            anim.SetLayerWeight(1, 0.5f);
+        }
+
 
         //방향을 정하고
         Vector3 dirH = transform.right * h;
@@ -82,5 +93,15 @@ public class PlayerMove : MonoBehaviour
         dirY = yVelocity;
         //y속도를 중력만큼 더해준다
         yVelocity += gravity * Time.deltaTime;
+    }
+
+    // 캐릭터가 특정 물체를 바라보도록 해보자
+    // 필요속성 : 바라볼 물체
+    public Transform lookedTarget;
+    private void OnAnimatorIK(int layerIndex)
+    {
+        print("layerIndex : " + layerIndex);
+        anim.SetLookAtPosition(lookedTarget.position);
+        anim.SetLookAtWeight(1);
     }
 }
