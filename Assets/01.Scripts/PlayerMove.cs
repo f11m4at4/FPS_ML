@@ -95,13 +95,5 @@ public class PlayerMove : MonoBehaviour
         yVelocity += gravity * Time.deltaTime;
     }
 
-    // 캐릭터가 특정 물체를 바라보도록 해보자
-    // 필요속성 : 바라볼 물체
-    public Transform lookedTarget;
-    private void OnAnimatorIK(int layerIndex)
-    {
-        print("layerIndex : " + layerIndex);
-        anim.SetLookAtPosition(lookedTarget.position);
-        anim.SetLookAtWeight(1);
-    }
+    
 }
