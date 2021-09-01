@@ -26,11 +26,12 @@ public class EnemyManager : MonoBehaviour
     public List<GameObject> enemyPool = new List<GameObject>();
 
 
-    // 싱글톤 디자인패턴을 이용하여 EnemyManager 를 사용하고 싶다.
-    public static EnemyManager Instance = null;
 
     // 필요속성 : SpawnPoints
     public Transform[] spawnpoints;
+
+    // 싱글톤 디자인패턴을 이용하여 EnemyManager 를 사용하고 싶다.
+    public static EnemyManager Instance = null;
 
     private void Awake()
     {

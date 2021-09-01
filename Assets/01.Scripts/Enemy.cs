@@ -161,6 +161,9 @@ public class Enemy : MonoBehaviour
             // 3. 공격하고 싶다. (print)
             anim.SetTrigger("Attack");
             currentTime = 0;
+
+            // Player Damage 입히기
+            PlayerHealth.Instance.OnDamageProcess();
         }
 
         // 타겟이 공격 범위를 벗어나면 상태를 Move 로 전환하고 싶다.
