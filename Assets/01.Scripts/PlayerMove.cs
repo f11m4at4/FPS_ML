@@ -42,13 +42,23 @@ public class PlayerMove : MonoBehaviour
         anim.SetFloat("Speed", v * v);
         anim.SetFloat("Direction", h);
         
-        if(Input.GetKey(KeyCode.LeftShift))
+        // Crouch animation Àç»ý
+        if(Input.GetKeyDown(KeyCode.LeftAlt))
+        {
+            anim.SetBool("IsCrouch", true);
+        }
+        else if(Input.GetKeyUp(KeyCode.LeftAlt))
+        {
+            anim.SetBool("IsCrouch", false);
+        }
+
+        if (Input.GetKey(KeyCode.LeftShift))
         {
             anim.SetLayerWeight(1, 1);
         }
         else
         {
-            anim.SetLayerWeight(1, 0.5f);
+        //    anim.SetLayerWeight(1, 0.5f);
         }
 
 

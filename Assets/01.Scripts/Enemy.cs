@@ -162,9 +162,15 @@ public class Enemy : MonoBehaviour
             anim.SetTrigger("Attack");
             currentTime = 0;
 
-            // Player Damage 입히기
-            PlayerHealth.Instance.OnDamageProcess();
+            
         }
+
+        //transform.LookAt(target.transform);
+        Vector3 dir = target.transform.position - transform.position;
+        dir.Normalize();
+        dir.y = 0;
+
+        transform.forward = dir;
 
         // 타겟이 공격 범위를 벗어나면 상태를 Move 로 전환하고 싶다.
         // 1. 타겟이 공격 범위를 벗어났으니까
