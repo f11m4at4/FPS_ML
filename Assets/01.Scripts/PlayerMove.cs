@@ -31,6 +31,7 @@ public class PlayerMove : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
     }
 
+    bool isCrouch = false;
     void Update()
     {
         //A,D 키 입력
@@ -45,11 +46,24 @@ public class PlayerMove : MonoBehaviour
         // Crouch animation 재생
         if(Input.GetKeyDown(KeyCode.LeftAlt))
         {
+            isCrouch = true;
             anim.SetBool("IsCrouch", true);
         }
         else if(Input.GetKeyUp(KeyCode.LeftAlt))
         {
+            isCrouch = false;
             anim.SetBool("IsCrouch", false);
+
+            cc.height = 2;
+            cc.center = Vector3.up;
+        }
+
+        // 만약 crouch 중이라면 
+        if (isCrouch)
+        {
+            // 충돌체 크기를 애니메이션의 커브값을 가져와서 적용시키고 싶다.
+            cc.height = anim.GetFloat("Height");
+            cc.center = Vector3.up * cc.height / 2;
         }
 
         if (Input.GetKey(KeyCode.LeftShift))
