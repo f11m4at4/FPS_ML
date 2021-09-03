@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -75,6 +76,27 @@ public class PlayerFire : MonoBehaviour
             AudioSource audio = fragmentEft.GetComponent<AudioSource>();
             //가져온 컴포넌트의 기능중 Play실행
             audio.Play();
+        }
+
+        // 만약 Clear 버튼을 누르면
+        if (Input.GetButtonDown("Clear"))
+        {
+            // 씬에 있는 모든 Enemy 제거하기
+            Eliminate();
+        }
+    }
+
+    // 씬에 있는 모든 Enemy 제거하기
+    private void Eliminate()
+    {
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        //for(int i=0;i<enemies.Length;i++)
+        //{
+        //    Destroy(enemies[i]);
+        //}
+        foreach(GameObject enemy in enemies)
+        {
+            Destroy(enemy);
         }
     }
 }
