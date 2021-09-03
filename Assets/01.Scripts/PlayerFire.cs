@@ -7,6 +7,9 @@ using UnityEngine;
 // Enemy 한테 야 너 맞았어. 라고 알려주고 싶다.
 public class PlayerFire : MonoBehaviour
 {
+    public delegate void DEliminate();
+    public DEliminate onEli;
+
     //총알공장
     public GameObject bulletFactory;
     //총구
@@ -16,7 +19,7 @@ public class PlayerFire : MonoBehaviour
 
     void Start()
     {
-        
+
     }
 
     void Update()
@@ -89,14 +92,15 @@ public class PlayerFire : MonoBehaviour
     // 씬에 있는 모든 Enemy 제거하기
     private void Eliminate()
     {
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        //for(int i=0;i<enemies.Length;i++)
+        onEli();
+        //GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        ////for(int i=0;i<enemies.Length;i++)
+        ////{
+        ////    Destroy(enemies[i]);
+        ////}
+        //foreach(GameObject enemy in enemies)
         //{
-        //    Destroy(enemies[i]);
+        //    Destroy(enemy);
         //}
-        foreach(GameObject enemy in enemies)
-        {
-            Destroy(enemy);
-        }
     }
 }

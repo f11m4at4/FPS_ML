@@ -41,6 +41,11 @@ public class Enemy : MonoBehaviour
         // target 을 찾아서 할당해 주자
         target = GameObject.Find("Player");
 
+        // PlayerFire 에 있는 델리게이트에 대리자가 나라고 등록해놓자
+        // -> 대리해서 처리할 함수 등록하기
+        PlayerFire pf = target.GetComponent<PlayerFire>();
+        pf.onEli += Eliminate;
+
 
         // CharacterController 가져오기
         cc = GetComponent<CharacterController>();
@@ -286,4 +291,16 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    // 사용자가 Clear 버튼을 눌렀을 때 적이 처리할 함수
+    public void Eliminate()
+    {
+        EnemyManager.Instance.enemyPool.Add(gameObject);
+        // 4. 나를 비활성화시켜야 한다.
+        gameObject.SetActive(false);
+    }
+
+    private void OnDisable()
+    {
+        
+    }
 }
